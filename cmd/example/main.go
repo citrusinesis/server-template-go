@@ -13,15 +13,19 @@ import (
 
 // Build information. These will be populated by ldflags during build
 var (
+	Name      = "example" // Change this to your app name
 	Version   = "dev"
 	Commit    = "none"
 	BuildTime = "unknown"
 )
 
 func init() {
+	fmt.Println("--------------------")
+	fmt.Printf("Starting %s...\n", Name)
 	fmt.Printf("Version:    %s\n", Version)
 	fmt.Printf("Commit:     %s\n", Commit)
 	fmt.Printf("Build Time: %s\n", BuildTime)
+	fmt.Println("--------------------")
 }
 
 func main() {

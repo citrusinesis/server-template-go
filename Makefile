@@ -7,8 +7,8 @@ MAIN_PATH=cmd/example/main.go
 VERSION=$(shell git describe --tags --always --dirty)
 COMMIT=$(shell git rev-parse HEAD)
 BUILD_TIME=$(shell date -u '+%Y-%m-%d_%H:%M:%S')
-PKG_PATH=example/cmd/example
-LDFLAGS=-ldflags "-X '${PKG_PATH}.Version=${VERSION}' -X '${PKG_PATH}.Commit=${COMMIT}' -X '${PKG_PATH}.BuildTime=${BUILD_TIME}'"
+PKG_PATH=main
+LDFLAGS=-ldflags "-X ${PKG_PATH}.Version=${VERSION} -X ${PKG_PATH}.Commit=${COMMIT} -X ${PKG_PATH}.BuildTime=${BUILD_TIME}"
 
 # Go related variables
 GOBASE=$(shell pwd)
@@ -20,6 +20,7 @@ MAKEFLAGS += --silent
 ## build: Build the binary
 build:
 	@echo "Building version ${VERSION}..."
+	@echo "${LDFLAGS}"
 	go build ${LDFLAGS} -o $(BUILD_DIR)/$(BINARY_NAME) $(MAIN_PATH)
 
 ## run: Run the application
