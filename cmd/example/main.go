@@ -2,13 +2,16 @@ package main
 
 import (
 	"context"
-	"example/internal/app"
-	"example/internal/config"
-	"example/internal/domain/user"
 	"fmt"
 	"log"
 
+	"example/internal/app"
+	"example/internal/config"
+	"example/internal/domain/user"
+	appLog "example/pkg/log"
+
 	"go.uber.org/fx"
+	"go.uber.org/fx/fxevent"
 )
 
 // Build information. These will be populated by ldflags during build
@@ -30,6 +33,11 @@ func init() {
 
 func main() {
 	app := fx.New(
+		appLog.Module,
+		fx.WithLogger(func(logger appLog.FxLogger) fxevent.Logger {
+			return logger
+		}),
+
 		config.Module,
 		app.Module,
 
