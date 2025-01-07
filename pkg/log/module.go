@@ -30,10 +30,4 @@ func WithOptions(opts *Options) fx.Option {
 	)
 }
 
-var Module = fx.Module("log",
-	fx.Provide(
-		DefaultOptions,
-		NewLogger,
-		NewFxLogger,
-	),
-)
+var Module = WithOptions(nil)

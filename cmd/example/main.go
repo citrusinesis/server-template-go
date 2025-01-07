@@ -30,11 +30,12 @@ func printVersion(logger appLog.Logger) {
 
 func main() {
 	app := fx.New(
-		appLog.WithOptions(&appLog.Options{
-			FormatterType: appLog.TextFormatter,
-			FilePath:      "",
-			Level:         appLog.DebugLevel,
-		}),
+		// appLog.WithOptions(&appLog.Options{
+		// 	FormatterType: appLog.TextFormatter,
+		// 	FilePath:      "",
+		// 	Level:         appLog.DebugLevel,
+		// }),
+		appLog.Module,
 		fx.WithLogger(func(logger appLog.FxLogger) fxevent.Logger {
 			return logger
 		}),
