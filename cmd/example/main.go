@@ -22,7 +22,7 @@ var (
 )
 
 func printVersion(logger appLog.Logger) {
-	logger = logger.WithModule("startup")
+	logger = logger.WithModule("main")
 	logger.Infof("Version: %s", Version)
 	logger.Infof("Commit: %s", Commit)
 	logger.Infof("Build Time: %s", BuildTime)
