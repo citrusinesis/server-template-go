@@ -26,7 +26,7 @@ var (
 var logOptions = appLog.DefaultOptions()
 
 func init() {
-	logger := appLog.NewLogger(logOptions).WithModule("init")
+	logger := appLog.NewLogger(logOptions).WithModule("metadata")
 	logger.Infof("Version: %s", Version)
 	logger.Infof("Commit: %s", Commit)
 	logger.Infof("Build Time: %s", BuildTime)
