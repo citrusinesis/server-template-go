@@ -46,10 +46,7 @@ func NewEcho(cfg *config.Config, logger appLog.Logger) *echo.Echo {
 	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 		Level: 5,
 	}))
-
 	// Add middleware here
-
-	e.GET("/", HealthCheck)
 
 	return e
 }
@@ -82,5 +79,8 @@ var Module = fx.Module("app",
 	fx.Provide(
 		NewEcho,
 		NewServer,
+	),
+	fx.Invoke(
+		NewHealthCheckHandler,
 	),
 )

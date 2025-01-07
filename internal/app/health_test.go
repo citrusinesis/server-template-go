@@ -14,16 +14,18 @@ import (
 type HealthCheckSuite struct {
 	suite.Suite
 	requester *testutil.Requester
+	handler   *app.HealthCheckHandler
 }
 
 func (s *HealthCheckSuite) SetupTest() {
 	s.requester = testutil.NewRequester(echo.New())
+	s.handler = app.NewHealthCheckHandler(s.requester.GetEcho())
 }
 
 func (s *HealthCheckSuite) TestHealthCheckReturnsOK() {
 	ctx, rec := s.requester.GET("/")
-	app.HealthCheck(ctx)
-
+	err := s.handler.HealthCheck(ctx)
+	s.NoError(err)
 	s.Equal(http.StatusOK, rec.Code)
 	s.Equal("ok", rec.Body.String())
 }
