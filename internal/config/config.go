@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+
 	"go.uber.org/fx"
 )
 
@@ -10,7 +12,12 @@ type Config struct {
 }
 
 type ServerConfig struct {
+	Host string
 	Port string
+}
+
+func (sc ServerConfig) String() string {
+	return fmt.Sprintf("%s:%s", sc.Host, sc.Port)
 }
 
 type DBConfig struct {
@@ -21,7 +28,7 @@ func NewConfig() (*Config, error) {
 	// Load from env/file
 	return &Config{
 		Server: ServerConfig{
-			Port: ":8080",
+			Port: "8080",
 		},
 	}, nil
 }
