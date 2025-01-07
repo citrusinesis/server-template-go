@@ -14,7 +14,7 @@ var Module = fx.Options(
 		persistence.NewUserRepository,
 
 		// Add your usecase here
-		application.NewUserService,
+		application.NewUserExampleUsecase,
 	),
 	fx.Invoke(presentation.NewUserHandler),
 )

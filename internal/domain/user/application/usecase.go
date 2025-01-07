@@ -6,6 +6,6 @@ type UserExampleUsecase struct {
 	repo *persistence.UserRepository
 }
 
-func NewUserService(repo *persistence.UserRepository) *UserExampleUsecase {
+func NewUserExampleUsecase(repo *persistence.UserRepository) *UserExampleUsecase {
 	return &UserExampleUsecase{repo: repo}
 }
