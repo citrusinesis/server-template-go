@@ -12,12 +12,17 @@ type Config struct {
 }
 
 type ServerConfig struct {
+	Bind        BindConfig
+	MaxBodySize string
+}
+
+type BindConfig struct {
 	Host string
 	Port string
 }
 
-func (sc ServerConfig) String() string {
-	return fmt.Sprintf("%s:%s", sc.Host, sc.Port)
+func (bc BindConfig) String() string {
+	return fmt.Sprintf("%s:%s", bc.Host, bc.Port)
 }
 
 type DBConfig struct {
@@ -28,7 +33,10 @@ func NewConfig() (*Config, error) {
 	// Load from env/file
 	return &Config{
 		Server: ServerConfig{
-			Port: "8080",
+			Bind: BindConfig{
+				Port: "8080",
+			},
+			MaxBodySize: "1M",
 		},
 	}, nil
 }
