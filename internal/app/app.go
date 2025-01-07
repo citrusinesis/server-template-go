@@ -53,7 +53,7 @@ func Start(lifecycle fx.Lifecycle, server *http.Server, logger appLog.Logger, co
 	})
 }
 
-var Module = fx.Options(
+var Module = fx.Module("app",
 	fx.Provide(
 		NewEcho,
 		NewServer,

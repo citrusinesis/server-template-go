@@ -33,6 +33,6 @@ func NewConfig() (*Config, error) {
 	}, nil
 }
 
-var Module = fx.Options(
+var Module = fx.Module("config",
 	fx.Provide(NewConfig),
 )
