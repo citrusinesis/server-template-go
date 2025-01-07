@@ -7,21 +7,27 @@ import (
 	"example/internal/app"
 	testutil "example/pkg/testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/labstack/echo/v4"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestHealthCheck(t *testing.T) {
-	t.Parallel()
+type HealthCheckSuite struct {
+	suite.Suite
+	requester *testutil.Requester
+}
 
-	t.Run("should return status 200", func(t *testing.T) {
-		ctx, rec := testutil.GET("/")
-		app.HealthCheck(ctx)
-		assert.Equal(t, http.StatusOK, rec.Code)
-	})
+func (s *HealthCheckSuite) SetupTest() {
+	s.requester = testutil.NewRequester(echo.New())
+}
 
-	t.Run("should return string \"ok\"", func(t *testing.T) {
-		ctx, rec := testutil.GET("/")
-		app.HealthCheck(ctx)
-		assert.Equal(t, "ok", rec.Body.String())
-	})
+func (s *HealthCheckSuite) TestHealthCheckReturnsOK() {
+	ctx, rec := s.requester.GET("/")
+	app.HealthCheck(ctx)
+
+	s.Equal(http.StatusOK, rec.Code)
+	s.Equal("ok", rec.Body.String())
+}
+
+func TestHealthCheckSuite(t *testing.T) {
+	suite.Run(t, new(HealthCheckSuite))
 }

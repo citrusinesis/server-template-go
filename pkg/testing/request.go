@@ -8,34 +8,69 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func BuildRequest(method string, target string, body io.Reader) (echo.Context, *httptest.ResponseRecorder) {
-	return BuildRequestWithOptions(method, target, body, nil)
+type Requester struct {
+	e *echo.Echo
 }
 
-func BuildRequestWithOptions(method string, target string, body io.Reader, options func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
-	e := echo.New()
+func NewRequester(echo *echo.Echo) *Requester {
+	return &Requester{echo}
+}
+
+func (r *Requester) GetEcho() *echo.Echo {
+	return r.e
+}
+
+func (r *Requester) BuildRequestWithOptions(method string, target string, body io.Reader, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
 	req := httptest.NewRequest(method, target, body)
 	rec := httptest.NewRecorder()
 
-	if options != nil {
-		options(req)
+	for _, opt := range options {
+		opt(req)
 	}
 
-	return e.NewContext(req, rec), rec
+	return r.e.NewContext(req, rec), rec
 }
 
-func GET(target string) (echo.Context, *httptest.ResponseRecorder) {
-	return BuildRequest(http.MethodGet, target, nil)
+func (r *Requester) GET(target string, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
+	return r.BuildRequestWithOptions(http.MethodGet, target, nil, options...)
 }
 
-func POST(target string, body io.Reader) (echo.Context, *httptest.ResponseRecorder) {
-	return BuildRequest(http.MethodGet, target, body)
+func (r *Requester) POST(target string, body io.Reader, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
+	return r.BuildRequestWithOptions(http.MethodPost, target, body, options...)
 }
 
-func PATCH(target string, body io.Reader) (echo.Context, *httptest.ResponseRecorder) {
-	return BuildRequest(http.MethodPatch, target, body)
+func (r *Requester) PUT(target string, body io.Reader, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
+	return r.BuildRequestWithOptions(http.MethodPut, target, body, options...)
 }
 
-func DELETE(target string) (echo.Context, *httptest.ResponseRecorder) {
-	return BuildRequest(http.MethodDelete, target, nil)
+func (r *Requester) PATCH(target string, body io.Reader, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
+	return r.BuildRequestWithOptions(http.MethodPatch, target, body, options...)
+}
+
+func (r *Requester) DELETE(target string, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
+	return r.BuildRequestWithOptions(http.MethodDelete, target, nil, options...)
+}
+
+func (r *Requester) OPTIONS(target string, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
+	return r.BuildRequestWithOptions(http.MethodOptions, target, nil, options...)
+}
+
+func (r *Requester) HEAD(target string, options ...func(*http.Request)) (echo.Context, *httptest.ResponseRecorder) {
+	return r.BuildRequestWithOptions(http.MethodHead, target, nil, options...)
+}
+
+func WithJSONHeader(req *http.Request) {
+	req.Header.Set("Content-Type", "application/json")
+}
+
+func WithBearerToken(token string) func(*http.Request) {
+	return func(req *http.Request) {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
+}
+
+func WithHeader(key, value string) func(*http.Request) {
+	return func(req *http.Request) {
+		req.Header.Set(key, value)
+	}
 }
