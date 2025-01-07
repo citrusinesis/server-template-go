@@ -22,7 +22,6 @@ func NewEcho(cfg *config.Config, logger appLog.Logger) *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(appMiddleware.Logger(logger))
 
-	e.Use(appMiddleware.JWT(cfg))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		Skipper: func(c echo.Context) bool {
 			return false
