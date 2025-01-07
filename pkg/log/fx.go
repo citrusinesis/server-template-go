@@ -44,10 +44,16 @@ func (l *fxLoggerImpl) LogEvent(event fxevent.Event) {
 			l.Debugf("Supplied: type=%s", e.TypeName)
 		}
 	case *fxevent.Provided:
-		if e.Err != nil {
-			l.Errorf("Provide failed: module=%s type=%v error=%v", e.ModuleName, e.OutputTypeNames, e.Err)
+		var moduleName string
+		if e.ModuleName == "" {
+			moduleName = "init"
 		} else {
-			l.Debugf("Provided: module=%s type=%v", e.ModuleName, e.OutputTypeNames)
+			moduleName = e.ModuleName
+		}
+		if e.Err != nil {
+			l.Errorf("Provide failed: module=%s type=%v error=%v", moduleName, e.OutputTypeNames, e.Err)
+		} else {
+			l.Debugf("Provided: module=%s type=%v", moduleName, e.OutputTypeNames)
 		}
 	}
 }
