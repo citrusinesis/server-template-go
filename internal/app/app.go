@@ -28,6 +28,23 @@ func NewEcho(cfg *config.Config, logger appLog.Logger) *echo.Echo {
 		},
 		Limit: cfg.Server.MaxBodySize,
 	}))
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		Skipper: func(c echo.Context) bool {
+			return false
+		},
+		AllowOrigins:     cfg.Server.CORS.AllowOrigins,
+		AllowMethods:     cfg.Server.CORS.AllowMethods,
+		AllowHeaders:     cfg.Server.CORS.AllowHeaders,
+		ExposeHeaders:    cfg.Server.CORS.ExposeHeaders,
+		AllowCredentials: cfg.Server.CORS.AllowCredentials,
+		MaxAge:           cfg.Server.CORS.MaxAge,
+	}))
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup: "header:X-XSRF-TOKEN",
+	}))
+	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+		Level: 5,
+	}))
 
 	// Add middleware here
 
