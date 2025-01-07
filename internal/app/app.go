@@ -21,8 +21,10 @@ func NewEcho(cfg *config.Config, logger appLog.Logger) *echo.Echo {
 
 	e.Use(middleware.Recover())
 	e.Use(appMiddleware.Logger(logger))
-
 	// Add middleware here
+
+	e.GET("/", HealthCheck)
+
 	return e
 }
 
