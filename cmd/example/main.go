@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"example/internal/app"
@@ -22,18 +21,20 @@ var (
 	BuildTime = "unknown"
 )
 
-func init() {
-	fmt.Println("--------------------")
-	fmt.Printf("Starting %s...\n", Name)
-	fmt.Printf("Version:    %s\n", Version)
-	fmt.Printf("Commit:     %s\n", Commit)
-	fmt.Printf("Build Time: %s\n", BuildTime)
-	fmt.Println("--------------------")
+func printVersion(logger appLog.Logger) {
+	logger = logger.WithModule("startup")
+	logger.Infof("Version: %s", Version)
+	logger.Infof("Commit: %s", Commit)
+	logger.Infof("Build Time: %s", BuildTime)
 }
 
 func main() {
 	app := fx.New(
-		appLog.Module,
+		appLog.WithOptions(&appLog.Options{
+			FormatterType: appLog.TextFormatter,
+			FilePath:      "",
+			Level:         appLog.DebugLevel,
+		}),
 		fx.WithLogger(func(logger appLog.FxLogger) fxevent.Logger {
 			return logger
 		}),
@@ -44,7 +45,7 @@ func main() {
 		// Add your domain module here
 		user.Module,
 
-		fx.Invoke(app.Start),
+		fx.Invoke(printVersion, app.Start),
 	)
 
 	if err := app.Start(context.Background()); err != nil {
