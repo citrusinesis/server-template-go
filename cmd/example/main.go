@@ -4,10 +4,12 @@ import (
 	"context"
 	"log"
 
+	appLog "example/pkg/log"
+
 	"example/internal/app"
 	"example/internal/config"
+	"example/internal/domain/example"
 	"example/internal/domain/user"
-	appLog "example/pkg/log"
 
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
@@ -44,6 +46,7 @@ func main() {
 		app.Module,
 
 		// Add your domain module here
+		example.Module,
 		user.Module,
 
 		fx.Invoke(printVersion, app.Start),

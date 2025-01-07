@@ -1,4 +1,4 @@
-package user
+package example
 
 import (
 	"example/internal/domain/example/application"
