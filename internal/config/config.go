@@ -15,6 +15,7 @@ type ServerConfig struct {
 	Bind        BindConfig
 	MaxBodySize string
 	CORS        CORSConfig
+	JWTSecret   string
 }
 
 type CORSConfig struct {

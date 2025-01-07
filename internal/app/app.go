@@ -22,12 +22,7 @@ func NewEcho(cfg *config.Config, logger appLog.Logger) *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(appMiddleware.Logger(logger))
 
-	e.Use(middleware.BodyLimitWithConfig(middleware.BodyLimitConfig{
-		Skipper: func(c echo.Context) bool {
-			return false
-		},
-		Limit: cfg.Server.MaxBodySize,
-	}))
+	e.Use(appMiddleware.JWT(cfg))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		Skipper: func(c echo.Context) bool {
 			return false
@@ -41,6 +36,13 @@ func NewEcho(cfg *config.Config, logger appLog.Logger) *echo.Echo {
 	}))
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "header:X-XSRF-TOKEN",
+	}))
+
+	e.Use(middleware.BodyLimitWithConfig(middleware.BodyLimitConfig{
+		Skipper: func(c echo.Context) bool {
+			return false
+		},
+		Limit: cfg.Server.MaxBodySize,
 	}))
 	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 		Level: 5,
