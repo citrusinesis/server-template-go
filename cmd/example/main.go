@@ -23,8 +23,10 @@ var (
 	BuildTime = "unknown"
 )
 
-func printVersion(logger appLog.Logger) {
-	logger = logger.WithModule("main")
+var logOptions = appLog.DefaultOptions()
+
+func init() {
+	logger := appLog.NewLogger(logOptions).WithModule("init")
 	logger.Infof("Version: %s", Version)
 	logger.Infof("Commit: %s", Commit)
 	logger.Infof("Build Time: %s", BuildTime)
@@ -32,12 +34,7 @@ func printVersion(logger appLog.Logger) {
 
 func main() {
 	app := fx.New(
-		// appLog.WithOptions(&appLog.Options{
-		// 	FormatterType: appLog.TextFormatter,
-		// 	FilePath:      "",
-		// 	Level:         appLog.DebugLevel,
-		// }),
-		appLog.Module,
+		appLog.WithOptions(logOptions),
 		fx.WithLogger(func(logger appLog.FxLogger) fxevent.Logger {
 			return logger
 		}),
@@ -49,7 +46,7 @@ func main() {
 		example.Module,
 		user.Module,
 
-		fx.Invoke(printVersion, app.Start),
+		fx.Invoke(app.Start),
 	)
 
 	if err := app.Start(context.Background()); err != nil {
