@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"example/internal/core/validator"
+	"example/pkg/validator"
 )
 
 type SimpleDTO struct {
