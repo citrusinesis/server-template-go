@@ -7,11 +7,12 @@ import (
 
 const (
 	ExampleKey store.StoreKey = "example"
-	// Add more keys here
+	// Add your store key
 )
 
 func Get[T any](ctx context.Context, key store.StoreKey) (T, bool) {
 	var defaultValue T
+
 	if ctx == nil || key == "" {
 		return defaultValue, false
 	}
@@ -26,10 +27,15 @@ func Get[T any](ctx context.Context, key store.StoreKey) (T, bool) {
 		return defaultValue, false
 	}
 
-	return val.(T), true
+	castVal, okType := val.(T)
+	if !okType {
+		return defaultValue, false
+	}
+
+	return castVal, true
 }
 
-func Store[T any](ctx context.Context, key store.StoreKey, val T) bool {
+func Set[T any](ctx context.Context, key store.StoreKey, val T) bool {
 	if ctx == nil || key == "" {
 		return false
 	}
