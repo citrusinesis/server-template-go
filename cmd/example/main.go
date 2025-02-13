@@ -33,7 +33,7 @@ func init() {
 }
 
 func main() {
-	app := fx.New(
+	server := fx.New(
 		appLog.WithOptions(logOptions),
 		fx.WithLogger(func(logger appLog.FxLogger) fxevent.Logger {
 			return logger
@@ -49,9 +49,9 @@ func main() {
 		fx.Invoke(app.Start),
 	)
 
-	if err := app.Start(context.Background()); err != nil {
+	if err := server.Start(context.Background()); err != nil {
 		log.Fatal(err)
 	}
 
-	<-app.Done()
+	<-server.Done()
 }
