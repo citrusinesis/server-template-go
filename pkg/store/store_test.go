@@ -11,7 +11,7 @@ func TestStore(t *testing.T) {
 		s := store.NewStore()
 
 		// Test Set and Get
-		key := store.StoreKey("test-key")
+		key := store.Key("test-key")
 		val := "test-value"
 		s.Set(key, val)
 
@@ -67,22 +67,22 @@ func TestStore(t *testing.T) {
 		done := make(chan bool)
 
 		go func() {
-			s.Set(store.StoreKey("key1"), "value1")
+			s.Set(store.Key("key1"), "value1")
 			done <- true
 		}()
 
 		go func() {
-			s.Set(store.StoreKey("key2"), "value2")
+			s.Set(store.Key("key2"), "value2")
 			done <- true
 		}()
 
 		<-done
 		<-done
 
-		if _, exists := s.Get(store.StoreKey("key1")); !exists {
+		if _, exists := s.Get(store.Key("key1")); !exists {
 			t.Error("key1 should exist")
 		}
-		if _, exists := s.Get(store.StoreKey("key2")); !exists {
+		if _, exists := s.Get(store.Key("key2")); !exists {
 			t.Error("key2 should exist")
 		}
 	})

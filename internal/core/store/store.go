@@ -6,11 +6,11 @@ import (
 )
 
 const (
-	ExampleKey store.StoreKey = "example"
+	ExampleKey store.Key = "example"
 	// Add your store key
 )
 
-func Get[T any](ctx context.Context, key store.StoreKey) (T, bool) {
+func Get[T any](ctx context.Context, key store.Key) (T, bool) {
 	var defaultValue T
 
 	if ctx == nil || key == "" {
@@ -35,7 +35,7 @@ func Get[T any](ctx context.Context, key store.StoreKey) (T, bool) {
 	return castVal, true
 }
 
-func Set[T any](ctx context.Context, key store.StoreKey, val T) bool {
+func Set[T any](ctx context.Context, key store.Key, val T) bool {
 	if ctx == nil || key == "" {
 		return false
 	}

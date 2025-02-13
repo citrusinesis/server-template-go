@@ -5,33 +5,33 @@ import (
 	"sync"
 )
 
-type StoreKey string
+type Key string
 
 type Store struct {
 	mu    sync.RWMutex
-	store map[StoreKey]any
+	store map[Key]any
 }
 
 func NewStore() *Store {
 	return &Store{
-		store: make(map[StoreKey]any),
+		store: make(map[Key]any),
 	}
 }
 
-func (s *Store) Get(key StoreKey) (any, bool) {
+func (s *Store) Get(key Key) (any, bool) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	val, ok := s.store[key]
 	return val, ok
 }
 
-func (s *Store) Set(key StoreKey, val any) {
+func (s *Store) Set(key Key, val any) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.store[key] = val
 }
 
-func (s *Store) Delete(key StoreKey) {
+func (s *Store) Delete(key Key) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	delete(s.store, key)
@@ -40,7 +40,7 @@ func (s *Store) Delete(key StoreKey) {
 func (s *Store) Clear() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	s.store = make(map[StoreKey]any)
+	s.store = make(map[Key]any)
 }
 
 type storeContextKey struct{}

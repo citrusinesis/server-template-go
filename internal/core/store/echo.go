@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetFromEcho[T any](c echo.Context, key store.StoreKey) (T, bool) {
+func GetFromEcho[T any](c echo.Context, key store.Key) (T, bool) {
 	var defaultValue T
 
 	ctx, ok := c.Get(middleware.ContextKey).(context.Context)
@@ -19,7 +19,7 @@ func GetFromEcho[T any](c echo.Context, key store.StoreKey) (T, bool) {
 	return Get[T](ctx, key)
 }
 
-func SetToEcho[T any](c echo.Context, key store.StoreKey, val T) bool {
+func SetToEcho[T any](c echo.Context, key store.Key, val T) bool {
 	ctx, ok := c.Get(middleware.ContextKey).(context.Context)
 	if !ok {
 		return ok
